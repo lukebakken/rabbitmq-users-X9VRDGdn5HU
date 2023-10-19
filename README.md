@@ -18,6 +18,19 @@ $ openssl version -d
 OPENSSLDIR: "/usr/lib/ssl"
 ```
 
+# `testssh.sh` output
+
+The command appears to hang in my environment:
+
+
+```
+lbakken@PROKOFIEV ~/development/lukebakken/rabbitmq-users-X9VRDGdn5HU (main=)
+$ testssl --add-ca ./certs/ca_certificate.pem localhost:5671
+
+No engine or GOST support via engine with your /usr/bin/openssl
+^C
+```
+
 # Run RabbitMQ
 
 The following command downloads and starts RabbitMQ 3.12.7, using a configuration file that enables TLS using the certs in the `certs` dir:
