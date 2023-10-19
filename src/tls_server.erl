@@ -3,17 +3,19 @@
 -export([start/0, sni_fun/1]).
 
 start() ->
-    inets:start(),
-    ssl:start(),
+    net_kernel:verbose(2),
+    application:load(ssl),
+    logger:set_application_level(ssl, debug),
+    {ok, _} = application:ensure_all_started(ssl),
     ok = io:format("[INFO] tls_server working directory:~tp~n", [file:get_cwd()]),
     SslOpts = [
         {cacertfile, "./certs/ca_certificate.pem"},
         {certfile, "./certs/server_localhost_certificate.pem"},
         {keyfile, "./certs/server_localhost_key.pem"},
-        {reuseaddr, false},
         {sni_fun, fun tls_server:sni_fun/1},
         {verify, verify_peer},
-        {fail_if_no_peer_cert, true}
+        {fail_if_no_peer_cert, true},
+        {versions, ['tlsv1.2','tlsv1.3']}
     ],
     ok = io:format("[INFO] before ssl:listen(4433, Opts)~n", []),
     {ok, ListenSocket} = ssl:listen(4433, SslOpts),
