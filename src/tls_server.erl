@@ -14,7 +14,7 @@ start() ->
         {keyfile, "./certs/server_localhost_key.pem"},
         {sni_fun, fun tls_server:sni_fun/1},
         {verify, verify_peer},
-        {fail_if_no_peer_cert, true},
+        {fail_if_no_peer_cert, false},
         {versions, ['tlsv1.2','tlsv1.3']}
     ],
     ok = io:format("[INFO] before ssl:listen(4433, Opts)~n", []),
@@ -69,6 +69,9 @@ write_keylog(Socket) ->
     ok = io:format("[INFO] writing keylog data to keylog.bin~n", []),
     KeylogItems1 =
         case ssl:connection_information(Socket, [keylog]) of
+            {error, _}=Error ->
+                ok = io:format("[ERROR] write_keylog Error: ~p~n", [Error]),
+                [];
             {ok, [{keylog, KeylogItems0}]} ->
                 KeylogItems0;
             {ok, []} ->

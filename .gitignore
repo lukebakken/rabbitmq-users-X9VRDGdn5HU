@@ -1,6 +1,8 @@
+rabbitmq.conf
+*.xz
+rabbitmq_server-*/
 inet-dist-tls.config
 rabbitmq-tls.config
 *.beam
 *.bin
 erl_crash.dump
-venv/
