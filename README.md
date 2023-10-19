@@ -1,3 +1,23 @@
+# Environment
+
+```
+$ cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_CODENAME=jammy
+DISTRIB_DESCRIPTION="Ubuntu 22.04.3 LTS"
+```
+
+```
+lbakken@PROKOFIEV ~/development/lukebakken/rabbitmq-users-X9VRDGdn5HU (main *=)
+$ openssl version
+OpenSSL 3.0.2 15 Mar 2022 (Library: OpenSSL 3.0.2 15 Mar 2022)
+
+lbakken@PROKOFIEV ~/development/lukebakken/rabbitmq-users-X9VRDGdn5HU (main *=)
+$ openssl version -d
+OPENSSLDIR: "/usr/lib/ssl"
+```
+
 # Run RabbitMQ
 
 The following command downloads and starts RabbitMQ 3.12.7, using a configuration file that enables TLS using the certs in the `certs` dir:
