@@ -31,26 +31,27 @@ extensions = [
     #    TLS_Ext_ExtendedMasterSecret(),# extended_master_secret
     scapy.layers.tls.extensions.TLS_Ext_SignatureAlgorithms(
         sig_algs=[
-            #        "sha256+ecdsa",
-            #        "sha384+ecdsa",
-            #        "sha512+ecdsa",
-            #        "ed25519",
-            #        "ed448",
-            #        0x0809, #"sha256+rsapss",
-            #        0x080a, #"sha384+rsapss",
-            #        0x080b, #"sha512+rsapss",
-            "sha256+rsaepss",
-            #        "sha384+rsaepss",
-            #        "sha512+rsaepss",
-            #        "sha256+rsa",
-            #        "sha384+rsa",
-            #        "sha512+rsa",
-            #        "sha224+ecdsa",
-            #        "sha224+rsa",
-            #        "sha224+dsa",
-            #        "sha256+dsa",
-            #        "sha384+dsa",
-            #        "sha512+dsa",
+            "sha256+ecdsa",
+            "sha384+ecdsa",
+            "sha512+ecdsa",
+            "ed25519",
+            "ed448",
+            0x0809, #"sha256+rsapss",
+            0x080a, #"sha384+rsapss",
+            0x080b, #"sha512+rsapss",
+            # One of the next 3 must be present for the handshake to succeed on Erlang 26 with TLS 1.3 also enabled
+            #"sha256+rsaepss",
+            #"sha384+rsaepss",
+            #"sha512+rsaepss",
+            "sha256+rsa",
+            "sha384+rsa",
+            "sha512+rsa",
+            "sha224+ecdsa",
+            "sha224+rsa",
+            "sha224+dsa",
+            "sha256+dsa",
+            "sha384+dsa",
+            "sha512+dsa",
         ]
     )
 ]
@@ -69,13 +70,19 @@ sock.sendall(bytes(ch))
 
 # Receive the response from the server
 response = sock.recv(4096)
+sock.close()
 
 # Parse the response as a TLS packet
 tls_packet = scapy.layers.tls.record.TLS(response)
 
 # Print the parsed packet
-print(tls_packet.show())
+tls_packet.show()
+
+if scapy.layers.tls.record.TLSAlert in tls_packet:
+    print("FAIL: Alert received")
+
+elif scapy.layers.tls.handshake.TLSServerHello in tls_packet:
+    print("SUCCESS: ServerHello")
 
 input('Hit any key to exit...')
 
-sock.close()
