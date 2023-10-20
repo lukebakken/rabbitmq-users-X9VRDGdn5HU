@@ -1,0 +1,10 @@
+The script runs on the OS supplied python3 versions from Arch,Ubuntu 20.04 / 22.04 and CentOS Stream 9. (The python3-scapy OS package is needed for all other than Arch. On Arch the package is python-scapy)
+
+The python cryptography module will silence some warnings, but should not be required - this is just the TLS handshake, not actual encrypted traffic.
+
+The presence of any of these signature algorithms gets the handshake to work: (On Erlang 26 with TLS1.2 and TLS1.3 enabled)
+"sha256+rsaepss",
+"sha384+rsaepss",
+"sha512+rsaepss",
+
+Disabling TLS 1.3 or downgrading to Erlang 25.x also fixes it.
