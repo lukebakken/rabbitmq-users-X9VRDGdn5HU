@@ -20,7 +20,7 @@ Set-StrictMode -Version 2.0
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 'Tls12'
 
 
-if ($OtpVersion -eq 25 || $OtpVersion -eq 26)
+if ($OtpVersion -eq 25 -or $OtpVersion -eq 26)
 {
     Write-Host "[INFO] using OTP version $OtpVersion"
 }
