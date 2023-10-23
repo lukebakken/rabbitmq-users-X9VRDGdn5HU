@@ -20,6 +20,9 @@ New-Variable -Name opt_dir  -Option Constant -Value (Join-Path -Path $curdir -Ch
 New-Variable -Name otp_25_dir  -Option Constant -Value (Join-Path -Path $opt_dir -ChildPath '25')
 New-Variable -Name otp_26_dir  -Option Constant -Value (Join-Path -Path $opt_dir -ChildPath '26')
 
+New-Variable -Name otp_25_erl_exe  -Option Constant -Value (Join-Path -Path $otp_25_dir -ChildPath 'bin' | Join-Path -ChildPath 'erl.exe')
+New-Variable -Name otp_26_erl_exe  -Option Constant -Value (Join-Path -Path $otp_26_dir -ChildPath 'bin' | Join-Path -ChildPath 'erl.exe')
+
 if (Test-Path -LiteralPath $otp_25_exe)
 {
     Write-Host "[INFO] found OTP 25 exe at $otp_25_exe_name"
@@ -38,8 +41,23 @@ else
     Invoke-RestMethod -Verbose -Uri "https://github.com/erlang/otp/releases/download/OTP-$otp_26_version/$otp_26_exe_name" -OutFile $otp_26_exe
 }
 
-& $otp_25_exe /S /D=$otp_25_dir
-& $otp_26_exe /S /D=$otp_26_dir
+if (Test-Path -LiteralPath $otp_25_erl_exe)
+{
+    Write-Host "[INFO] found OTP 25 erl.exe at $otp_25_erl_exe"
+}
+else
+{
+    Start-Process -FilePath $otp_25_exe -Wait -ArgumentList '/S',"/D=$PWD\otp\25"
+}
+
+if (Test-Path -LiteralPath $otp_26_erl_exe)
+{
+    Write-Host "[INFO] found OTP 26 erl.exe at $otp_26_erl_exe"
+}
+else
+{
+    Start-Process -FilePath $otp_26_exe -Wait -ArgumentList '/S',"/D=$PWD\otp\26"
+}
 
 New-Variable -Name dotnet_sdk_version  -Option Constant -Value '3.1.426'
 New-Variable -Name dotnet_sdk_exe_name  -Option Constant -Value "dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
@@ -55,4 +73,4 @@ else
     Invoke-RestMethod -Verbose -Uri $dotnet_sdk_uri -OutFile $dotnet_sdk_exe
 }
 
-& $dotnet_sdk_exe /install /silent /norestart
+Start-Process -FilePath $dotnet_sdk_exe -Wait -ArgumentList '/install','/silent','/norestart'
