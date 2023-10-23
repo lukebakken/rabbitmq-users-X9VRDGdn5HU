@@ -1,3 +1,4 @@
+.tool-versions
 otp/2[56]/
 rabbitmq.conf
 *.xz
