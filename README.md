@@ -1,63 +1,23 @@
 # Environment
 
-```
-$ cat /etc/lsb-release
-DISTRIB_ID=Ubuntu
-DISTRIB_RELEASE=22.04
-DISTRIB_CODENAME=jammy
-DISTRIB_DESCRIPTION="Ubuntu 22.04.3 LTS"
-```
+## Windows
 
-```
-lbakken@PROKOFIEV ~/development/lukebakken/rabbitmq-users-X9VRDGdn5HU (main *=)
-$ openssl version
-OpenSSL 3.0.2 15 Mar 2022 (Library: OpenSSL 3.0.2 15 Mar 2022)
+![`winver` screenshot](windows-version.png)
 
-lbakken@PROKOFIEV ~/development/lukebakken/rabbitmq-users-X9VRDGdn5HU (main *=)
-$ openssl version -d
-OPENSSLDIR: "/usr/lib/ssl"
-```
+## Setup
 
-# `testssh.sh` output
+To set up a fresh Windows 2016 server, do the following:
 
-The command appears to hang in my environment:
-
-
-```
-lbakken@PROKOFIEV ~/development/lukebakken/rabbitmq-users-X9VRDGdn5HU (main=)
-$ testssl --add-ca ./certs/ca_certificate.pem localhost:5671
-
-No engine or GOST support via engine with your /usr/bin/openssl
-^C
-```
-
-# Run RabbitMQ
-
-The following command downloads and starts RabbitMQ 3.12.7, using a configuration file that enables TLS using the certs in the `certs` dir:
-
-
-```
-./run-rabbitmq.sh
-```
-
-# TLS client examples
-
-The `run-tls-client.sh` script takes two optional arguments.
-
-## Run `openssl s_client` using TLS 1.2 against RabbitMQ port 5671
-
-```
-./run-tls-client.sh -tls1_2 5671
-```
-
-## Run `openssl s_client` using TLS 1.3 against RabbitMQ port 5671
-
-```
-./run-tls-client.sh -tls1_3 5671
-```
-
-## Run `openssl s_client` using TLS 1.2 or 1.3 against RabbitMQ port 5671
-
-```
-./run-tls-client.sh '-no_ssl3 -no_tls1' 5671
-```
+* Run all Windows Updates on the server
+* Install `git`. This can be done using Scoop. Open a powershell console and run:
+    ```
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+    irm get.scoop.sh | iex
+    scoop install git
+    ```
+* Clone this repository
+* Open an administrative powershell console, and run `import-ca-certificate.ps1`
+* Open a regular powershell console, and run:
+    ```
+    .\setup.ps1 -InstallOtp25 -InstallOtp26 -InstallDotnetSdk
+    ```
