@@ -1,3 +1,4 @@
+otp/2[56]/
 rabbitmq.conf
 *.xz
 rabbitmq_server-*/
@@ -5,4 +6,5 @@ inet-dist-tls.config
 rabbitmq-tls.config
 *.beam
 *.bin
+*.exe
 erl_crash.dump
