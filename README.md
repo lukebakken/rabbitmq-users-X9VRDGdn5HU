@@ -37,7 +37,7 @@ dotnet run
 
 ## Output (Failure)
 
-![OTP 26 failure - packet capture](failure-otp-26.pcapng)
+[OTP 26 failure - packet capture](failure-otp-26.pcapng)
 
 ### Erlang TLS Server Output
 
@@ -166,7 +166,7 @@ dotnet run
 
 ## Output (Success)
 
-![OTP 25 success - packet capture](success-otp-25.pcapng)
+[OTP 25 success - packet capture](success-otp-25.pcapng)
 
 ### Erlang TLS Server Output
 
