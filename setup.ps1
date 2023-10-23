@@ -40,3 +40,19 @@ else
 
 & $otp_25_exe /S /D=$otp_25_dir
 & $otp_26_exe /S /D=$otp_26_dir
+
+New-Variable -Name dotnet_sdk_version  -Option Constant -Value '3.1.426'
+New-Variable -Name dotnet_sdk_exe_name  -Option Constant -Value "dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
+New-Variable -Name dotnet_sdk_exe  -Option Constant -Value (Join-Path -Path $curdir -ChildPath $dotnet_sdk_exe_name)
+New-Variable -Name dotnet_sdk_uri  -Option Constant -Value "https://download.visualstudio.microsoft.com/download/pr/b70ad520-0e60-43f5-aee2-d3965094a40d/667c122b3736dcbfa1beff08092dbfc3/dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
+
+if (Test-Path -LiteralPath $dotnet_sdk_exe)
+{
+    Write-Host "[INFO] found .NET SDK exe at $dotnet_sdk_exe"
+}
+else
+{
+    Invoke-RestMethod -Verbose -Uri $dotnet_sdk_uri -OutFile $dotnet_sdk_exe
+}
+
+& $dotnet_sdk_exe /install /silent /norestart
