@@ -1,3 +1,9 @@
+param(
+    [switch]$InstallDotnetSdk = $false,
+    [switch]$InstallOtp25 = $false,
+    [switch]$InstallOtp26 = $false
+)
+
 $ProgressPreference = 'Continue'
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 2.0
@@ -47,7 +53,14 @@ if (Test-Path -LiteralPath $otp_25_erl_exe)
 }
 else
 {
-    Start-Process -FilePath $otp_25_exe -Wait -ArgumentList '/S',"/D=$PWD\otp\25"
+    if ($InstallOtp25)
+    {
+        Start-Process -FilePath $otp_25_exe -Wait -ArgumentList '/S',"/D=$PWD\otp\25"
+    }
+    else
+    {
+        Write-Host "[WARNING] NOT installing OTP 25"
+    }
 }
 
 if (Test-Path -LiteralPath $otp_26_erl_exe)
@@ -56,21 +69,35 @@ if (Test-Path -LiteralPath $otp_26_erl_exe)
 }
 else
 {
-    Start-Process -FilePath $otp_26_exe -Wait -ArgumentList '/S',"/D=$PWD\otp\26"
+    if ($InstallOtp26)
+    {
+        Start-Process -FilePath $otp_26_exe -Wait -ArgumentList '/S',"/D=$PWD\otp\26"
+    }
+    else
+    {
+        Write-Host "[WARNING] NOT installing OTP 26"
+    }
 }
 
-New-Variable -Name dotnet_sdk_version  -Option Constant -Value '3.1.426'
-New-Variable -Name dotnet_sdk_exe_name  -Option Constant -Value "dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
-New-Variable -Name dotnet_sdk_exe  -Option Constant -Value (Join-Path -Path $curdir -ChildPath $dotnet_sdk_exe_name)
-New-Variable -Name dotnet_sdk_uri  -Option Constant -Value "https://download.visualstudio.microsoft.com/download/pr/b70ad520-0e60-43f5-aee2-d3965094a40d/667c122b3736dcbfa1beff08092dbfc3/dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
-
-if (Test-Path -LiteralPath $dotnet_sdk_exe)
+if ($InstallDotnetSdk)
 {
-    Write-Host "[INFO] found .NET SDK exe at $dotnet_sdk_exe"
+    New-Variable -Name dotnet_sdk_version  -Option Constant -Value '3.1.426'
+    New-Variable -Name dotnet_sdk_exe_name  -Option Constant -Value "dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
+    New-Variable -Name dotnet_sdk_exe  -Option Constant -Value (Join-Path -Path $curdir -ChildPath $dotnet_sdk_exe_name)
+    New-Variable -Name dotnet_sdk_uri  -Option Constant -Value "https://download.visualstudio.microsoft.com/download/pr/b70ad520-0e60-43f5-aee2-d3965094a40d/667c122b3736dcbfa1beff08092dbfc3/dotnet-sdk-$dotnet_sdk_version-win-x64.exe"
+
+    if (Test-Path -LiteralPath $dotnet_sdk_exe)
+    {
+        Write-Host "[INFO] found .NET SDK exe at $dotnet_sdk_exe"
+    }
+    else
+    {
+        Invoke-RestMethod -Verbose -Uri $dotnet_sdk_uri -OutFile $dotnet_sdk_exe
+    }
+
+    Start-Process -FilePath $dotnet_sdk_exe -Wait -ArgumentList '/install','/silent','/norestart'
 }
 else
 {
-    Invoke-RestMethod -Verbose -Uri $dotnet_sdk_uri -OutFile $dotnet_sdk_exe
+    Write-Host "[WARNING] NOT installing .NET SDK 3.1"
 }
-
-Start-Process -FilePath $dotnet_sdk_exe -Wait -ArgumentList '/install','/silent','/norestart'
