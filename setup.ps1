@@ -16,9 +16,9 @@ New-Variable -Name otp_26_exe_name  -Option Constant -Value "otp_win64_$otp_26_v
 New-Variable -Name otp_25_exe  -Option Constant -Value (Join-Path -Path $curdir -ChildPath $otp_25_exe_name)
 New-Variable -Name otp_26_exe  -Option Constant -Value (Join-Path -Path $curdir -ChildPath $otp_26_exe_name)
 
-New-Variable -Name opt_dir  -Option Constant -Value (Join-Path -Path $curdir -ChildPath 'opt')
-New-Variable -Name otp_25_dir  -Option Constant -Value (Join-Path -Path $opt_dir -ChildPath '25')
-New-Variable -Name otp_26_dir  -Option Constant -Value (Join-Path -Path $opt_dir -ChildPath '26')
+New-Variable -Name otp_dir  -Option Constant -Value (Join-Path -Path $curdir -ChildPath 'otp')
+New-Variable -Name otp_25_dir  -Option Constant -Value (Join-Path -Path $otp_dir -ChildPath '25')
+New-Variable -Name otp_26_dir  -Option Constant -Value (Join-Path -Path $otp_dir -ChildPath '26')
 
 New-Variable -Name otp_25_erl_exe  -Option Constant -Value (Join-Path -Path $otp_25_dir -ChildPath 'bin' | Join-Path -ChildPath 'erl.exe')
 New-Variable -Name otp_26_erl_exe  -Option Constant -Value (Join-Path -Path $otp_26_dir -ChildPath 'bin' | Join-Path -ChildPath 'erl.exe')
